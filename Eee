@@ -1,0 +1,307 @@
+ 
+local a=game:getservice'httpservice'local b=game:getservice'players'local c=game
+:getservice'proximitypromptservice'local d=game:getservice'replicatedstorage'
+local e=game:getservice'runservice'local f=game:getservice'soundservice'local g=
+game:getservice'workspace'local h=game:getservice'contentprovider'local i=game:
+getservice'coregui'do if getgenv().doors then return end getgenv().doors=true
+end do local j j=hookfunction(h.preloadasync,function(k,l,m)if table.find(l,i)
+then local n=function(n,o)if n:match'^rbxasset://'or n:match'^rbxthumb://'then
+return m(n,o)end end warn'anticheat check detected'return j(k,l,n)end return j(k
+,l,m)end)end local j=
+[[https://raw.githubusercontent.com/wally-rblx/linorialib/main/]]local k=
+loadstring(game:httpget(j..'library.lua'))()local l=loadstring(game:httpget(j..
+'addons/savemanager.lua'))()local m=loadstring(game:httpget(j..
+'addons/thememanager.lua'))()local n=b.localplayer local o=g.currentcamera local
+p=instance.new'sound'local q=instance.new'pointlight'local r=instance.new
+'surfacelight'local s=d:waitforchild'gamedata'local t=d:waitforchild'bricks'
+local u={padlockhint=t:waitforchild'padlockhint',engageminigame=t:waitforchild
+'engageminigame',clutchheartbeat=t:waitforchild'clutchheartbeat',screech=t:
+waitforchild'screech'}local v={}local w=0 local x=function(x,y)k:notify(x)if y
+and toggles.sound_notifier.value then p.timeposition=0.25 p:play()end end local
+y do y={}y.attached={}y.__index=y local z=vector3.new(1,0,1)function y.new(a)
+local b=setmetatable({instance=a,destructed=false},y)b._destroylistener=b.
+instance.ancestrychanged:connect(function(c,d)if d==nil then b:destroy()end end)
+return b:constructor(a)end function y.constructor(a,b)a.root=b:waitforchild(
+'humanoidrootpart',5)a.humanoid=b:waitforchild('humanoid',5)y.attached[b]=a task
+.defer(a.onstart,a)return a end function y.onstart(a)a.instance.childadded:
+connect(function(b)if b:isa'tool'then a:ontooladded(b)end end)end function y.
+ontooladded(a,b)if b.name=='libraryhintpaper'then if not toggles.padlock_code.
+value then return end local c=b:waitforchild('ui',1)if c then local d={}for e=1,
+5 do local f=c:findfirstchild(tostring(e),1)if f then local g=v[f.
+imagerectoffset.x/50]if g~=nil then d[e]=g end end end local e=''for f=1,5 do
+local g=d[f]e=e..(g or'_')end k:notify('[code parser]: '..e,10)end end end
+function y.onphysics(a,b,c)local d=options.sprint_boost.value if d>0 and toggles
+.sprint_enabled.value and options.sprint_keybind:getstate()then local e=a.
+humanoid.movedirection*z if e.magnitude>0 then a.instance:translateby(e*d*c)end
+end end function y.destroy(a)if a.destructed then return else a.destructed=true
+a._destroylistener:disconnect()end y.attached[a.instance]=nil end end local z do
+z={}z.attached={}z.__index=z function z.new(a)local b=setmetatable({instance=a,
+destructed=false},z)b._destroylistener=b.instance.ancestrychanged:connect(
+function(c,d)if d==nil then b:destroy()end end)return b:constructor(a)end
+function z.constructor(a,b)a.root=b:waitforchild('humanoidrootpart',5)a.humanoid
+=b:waitforchild('humanoid',5)z.attached[b]=a task.defer(a.onstart,a)return a end
+function z.onstart(a)end function z.render(a)end function z.destroy(a)if a.
+destructed then return else a.destructed=true a._destroylistener:disconnect()end
+z.attached[a.instance]=nil end end local a do a={}a.__index=a function a.new(b)
+local c=setmetatable({instance=b,destructed=false},a)c._destroylistener=b.
+playerremoving:connect(function(d)if d==b then c:destroy()end end)return c:
+constructor(b)end function a.constructor(b,c)task.defer(b.onstart,b)return b end
+function a.onstart(b)local c=b.instance c.characteradded:connect(function(d)b:
+oncharacteradded(d)end)local d=c.character if d then b:oncharacteradded(d)end
+end function a.oncharacteradded(b,c)z.new(c)end function a.destroy(b)if b.
+destructed then return else b.destructed=true end end end local b do b={}b.
+attached={}b.__index=b local c=o.worldtoviewportpoint local d,e=vector2.new,
+cframe.new local f=e(0,1,0)function b.new(g)local h=setmetatable({instance=g,
+destructed=false},b)h._destroylistener=h.instance.ancestrychanged:connect(
+function(i,j)if j==nil then h:destroy()end end)return h:constructor(g)end
+function b.constructor(g,h)local i=h local j=i:waitforchild('figureragdoll',2.5)
+g.root=j:waitforchild('root',2.5)g.quad=drawing.new'quad'task.defer(function()g:
+onstart()b.attached[h]=g end)return g end function b.onstart(g)local h=g.quad h.
+visible=false h.transparency=0.75 h.color=color3.new(1,0,0)h.thickness=3 end
+function b.render(g)local h=g.quad local i=g.root if toggles.figure_esp.value
+then local j=i.cframe*f local k=i.size*1.75 local l=c(o,(j*e(k.x,k.y,0)).
+position)local m=c(o,(j*e(-k.x,k.y,0)).position)local n=c(o,(j*e(-k.x,-k.y,0)).
+position)local o=c(o,(j*e(k.x,-k.y,0)).position)if math.min(l.z,m.z,n.z,o.z)>0
+then h.pointa=d(m.x,m.y)h.pointb=d(l.x,l.y)h.pointc=d(o.x,o.y)h.pointd=d(n.x,n.y
+)h.visible=true else h.visible=false end else h.visible=false end end function b
+.destroy(g)if g.destructed then return else g.destructed=true g._destroylistener
+:disconnect()end b.attached[g.instance]=nil g.quad:remove()end end local c do c=
+{}c.attached={}c.__index=c local d=o.worldtoviewportpoint local e,f=vector2.new,
+cframe.new function c.new(g)local h=setmetatable({instance=g,destructed=false},c
+)h._destroylistener=h.instance.ancestrychanged:connect(function(i,j)if j==nil
+then h:destroy()end end)return h:constructor(g)end function c.constructor(g,h)g.
+quad=drawing.new'quad'g.root=h.primarypart or h:waitforchild('rushnew',5)task.
+defer(function()g:onstart()c.attached[h]=g end)return g end function c.onstart(g
+)local h=g.quad h.visible=false h.transparency=0.75 h.color=color3.new(1,0,0)h.
+thickness=2 end local g=vector3.new(0.4,0.8,0)function c.render(h)local i=h.quad
+local j=h.root if toggles.rush_esp.value then local k=j.cframe local l=j.size*g
+local m=d(o,(k*f(l.x,l.y,0)).position)local n=d(o,(k*f(-l.x,l.y,0)).position)
+local o=d(o,(k*f(-l.x,-l.y,0)).position)local p=d(o,(k*f(l.x,-l.y,0)).position)
+if math.min(m.z,n.z,o.z,p.z)>0 then i.pointa=e(n.x,n.y)i.pointb=e(m.x,m.y)i.
+pointc=e(p.x,p.y)i.pointd=e(o.x,o.y)i.visible=true else i.visible=false end else
+i.visible=false end end function c.destroy(h)if h.destructed then return else h.
+destructed=true h._destroylistener:disconnect()end c.attached[h.instance]=nil h.
+quad:remove()end end local d do d={}d.attached={}d.__index=d local e=o.
+worldtoviewportpoint local f,g=vector2.new,cframe.new function d.new(h,i)local j
+=setmetatable({instance=h,destructed=false},d)j._destroylistener=j.instance.
+ancestrychanged:connect(function(k,l)if l==nil then j:destroy()end end)return j:
+constructor(h,i)end function d.constructor(h,i,j)h.roomnumber=j h.quad=drawing.
+new'quad'task.defer(function()h:onstart()d.attached[i]=h end)return h end
+function d.onstart(h)local i=h.quad i.visible=false i.transparency=0.6 i.
+thickness=2 end function d.render(h)local i=h.quad local j=h.instance.door if s.
+latestroom.value-h.roomnumber>2 then i.visible=false return end if toggles.
+door_esp.value then local k=j.cframe local l=j.size/2 local m=e(o,(k*g(l.x,l.y,0
+)).position)local n=e(o,(k*g(-l.x,l.y,0)).position)local o=e(o,(k*g(-l.x,-l.y,0)
+).position)local p=e(o,(k*g(l.x,-l.y,0)).position)if math.min(m.z,n.z,o.z,p.z)>0
+then i.pointa=f(n.x,n.y)i.pointb=f(m.x,m.y)i.pointc=f(p.x,p.y)i.pointd=f(o.x,o.y
+)i.color=options.door_esp_color.value i.visible=true else i.visible=false end
+else i.visible=false end end function d.destroy(h)if h.destructed then return
+else h.destructed=true h._destroylistener:disconnect()end d.attached[h.instance]
+=nil h.quad:remove()end end local e do e={}e.attached={}e.__index=e local f=o.
+worldtoviewportpoint local g,h=vector2.new,cframe.new local i=h(0,0,-0.5)
+function e.new(j,k)local l=setmetatable({instance=j,destructed=false},e)l.
+_destroylistener=l.instance.ancestrychanged:connect(function(m,n)if n==nil then
+l:destroy()end end)return l:constructor(j,k)end function e.constructor(j,k,l)j.
+roomnum=l j.root=k:waitforchild('main',2.5)j.occupied=k:waitforchild(
+'hiddenplayer',2.5)j.quad=drawing.new'quad'task.defer(function()j:onstart()e.
+attached[k]=j end)return j end function e.onstart(j)if j.destructed then return
+end local k=j.quad k.visible=false k.thickness=2 end function e.render(j)local k
+=j.quad local l=j.root local m=j.occupied.value if not m and toggles.
+wardrobe_esp.value then local n=l.cframe*i local o=l.size*0.55 local p=f(o,(n*h(
+o.x,o.y,0)).position)local q=f(o,(n*h(-o.x,o.y,0)).position)local r=f(o,(n*h(-o.
+x,-o.y,0)).position)local s=f(o,(n*h(o.x,-o.y,0)).position)if math.min(p.z,q.z,r
+.z,s.z)>0 then k.pointa=g(q.x,q.y)k.pointb=g(p.x,p.y)k.pointc=g(s.x,s.y)k.pointd
+=g(r.x,r.y)k.color=options.wardrobe_esp_color.value k.transparency=(s.latestroom
+.value-j.roomnum>1)and 0.1 or 0.4 k.visible=true else k.visible=false end else k
+.visible=false end end function e.destroy(j)if j.destructed then return else j.
+destructed=true j._destroylistener:disconnect()end e.attached[j.instance]=nil j.
+quad:remove()end end local f do f={}f.attached={}f.__index=f local g=o.
+worldtoviewportpoint local h=vector2.new(0,3)function f.new(i,j)local k=
+setmetatable({instance=i,destructed=false},f)k._destroylistener=k.instance.
+ancestrychanged:connect(function(l,m)if m==nil then k:destroy()end end)return k:
+constructor(i,j)end function f.constructor(i,j,k)i.name=k or j.name i.label=
+drawing.new'text'i.indicator=drawing.new'circle'i.outline=drawing.new'circle'
+task.defer(function()i:onstart()f.attached[j]=i end)return i end function f.
+onstart(i)local j,k,l=i.label,i.indicator,i.outline j.text=i.name j.size=18 j.
+center=true j.outline=true j.visible=false k.thickness=1 k.numsides=12 k.radius=
+5 k.filled=true k.visible=false l.color=color3.new()l.thickness=2 l.numsides=12
+l.radius=5 l.filled=false l.visible=false l.zindex=2 end function f.render(i)
+local j,k,l=i.label,i.indicator,i.outline if toggles.obtainable_esp.value then
+local m,n=g(o,i.instance.position)local o=n and m.z>2.5 if o then local p=
+vector2.new(m.x,m.y)j.position=p+h k.position=p l.position=p local q=options.
+obtainable_esp_color.value j.color=q k.color=q end j.visible=o k.visible=o l.
+visible=o else j.visible=false k.visible=false l.visible=false end end function
+f.destroy(i)if i.destructed then return else i.destructed=true i.
+_destroylistener:disconnect()end f.attached[i.instance]=nil i.label:remove()i.
+indicator:remove()i.outline:remove()end end local g do g={}g.attached={}g.
+__index=g local h=o.worldtoviewportpoint local i=vector2.new(0,3)function g.new(
+j,k)local l=setmetatable({instance=j,destructed=false},g)l._destroylistener=l.
+instance.ancestrychanged:connect(function(m,n)if n==nil then l:destroy()end end)
+return l:constructor(j,k)end function g.constructor(j,k,l)j.name=l or k.name j.
+label=drawing.new'text'j.indicator=drawing.new'circle'j.outline=drawing.new
+'circle'task.defer(function()j:onstart()g.attached[k]=j end)return j end
+function g.onstart(j)local k,l,m=j.label,j.indicator,j.outline k.text=j.name k.
+size=18 k.center=true k.outline=true k.visible=false l.thickness=1 l.numsides=12
+l.radius=5 l.filled=true l.visible=false m.color=color3.new()m.thickness=2 m.
+numsides=12 m.radius=5 m.filled=false m.visible=false m.zindex=2 end function g.
+render(j)local k,l,m=j.label,j.indicator,j.outline if toggles.interactable_esp.
+value then local n,o=h(o,j.instance.position)local p=o and n.z>2.5 if p then
+local q=vector2.new(n.x,n.y)k.position=q+i l.position=q m.position=q local r=
+options.interactable_esp_color.value k.color=r l.color=r end k.visible=p l.
+visible=p m.visible=p else k.visible=false l.visible=false m.visible=false end
+end function g.destroy(j)if j.destructed then return else j.destructed=true j.
+_destroylistener:disconnect()end g.attached[j.instance]=nil j.label:remove()j.
+indicator:remove()j.outline:remove()end end local h do h={}h.__index=h function
+h.new(i)local j=setmetatable({instance=i,destructed=false},h)j._destroylistener=
+j.instance.ancestrychanged:connect(function(k,l)if l==nil then j:destroy()end
+end)return j:constructor(i)end function h.constructor(i,j)task.defer(i.onstart,i
+)return i end function h.onstart(i)local j=i.instance if j.name=='50'then task.
+defer(i.onlibrary,i)task.defer(i.onfigure,i)elseif j.name=='100'then task.defer(
+i.onfigure,i)end local k=function(k)i:ondescendant(k)end j.descendantadded:
+connect(k)for l,m in ipairs(j:getdescendants())do k(m)if l%500==0 then task.
+wait()end end end function h.ondescendant(i,j)local k=j.parent if j.name=='main'
+then if k.name=='leverforgate'then g.new(j,'lever')elseif k.name=='lighter'then
+f.new(j,'lighter')elseif k.name=='vitamins'then f.new(j,'vitamins')elseif k.name
+=='lockpick'then f.new(j,'lockpicks')elseif k.name=='bandage'then f.new(j,
+'bandages')end elseif k.name=='door'then if j.name=='door'and j:isa'meshpart'
+then d.new(k,tonumber(i.instance.name))local l=k:findfirstchild'lock'if l then g
+.new(l,'lock')end end elseif k.name=='keyobtain'then if j.name=='hitbox'then f.
+new(j,'key')end elseif j.name=='wardrobe'then e.new(j,tonumber(i.instance.name))
+end end function h.onfigure(i)local j=i.instance local k=j:waitforchild(
+'figuresetup',2.5)local l=b.new(k)end function h.onlibrary(i)local j=i.instance
+local k=function(k)if k.name=='super cool bookshelf with hint book'then local l=
+k:waitforchild('livehintbook',2.5)if l then local m=l:waitforchild('base',2.5)if
+m then f.new(m,'book')end end end end local l=j:waitforchild('assets',5)for m,n
+in ipairs(l:getchildren())do task.defer(k,n)end l.childadded:connect(k)end
+function h.destroy(i)if i.destructed then return else i.destructed=true i.
+_destroylistener:disconnect()end end end k:setwatermark
+'linoria community (ominousvibes)'k:notify'loading ui...'do local i=k:
+createwindow'doors'do local j=i:addtab'gameplay'do local k=j:addlefttabbox
+'modifications'local l=k:addtab'character mods'l:addtoggle('sprint_enabled',{
+text='sprint enabled',default=true,tooltip=
+'enables sprinting by pressing the keybind'}):addkeypicker('sprint_keybind',{
+text='sprint',default='tab'})l:addslider('sprint_boost',{text=
+'sprint boost (in seconds)',min=0,max=30,default=20,rounding=1,suffix=' studs'})l
+:addtoggle('glow_enabled',{text='body glow',default=true,tooltip=
+'adds a subtle glow for better vision'})l:addslider('glow_brightness',{text=
+'glow brightness',min=0,max=150,default=100,rounding=0,suffix=''})local m=k:addtab
+'world mods'm:addtoggle('remove_ambience',{text='remove ambience',default=false,
+tooltip='removes the unnecessary sounds from the world'})end do local k=j:
+addlefttabbox'assists'local l=k:addtab'minigame assists'l:addtoggle(
+'padlock_code',{text='padlock parser',default=true,tooltip=
+'parses the padlock code using your books and paper'})l:addtoggle('breaker_win',
+{text='breaker assist',default=true,tooltip=
+[[electrical breaker will be fully completed regardless of the actual state of the switches (room 100)]]
+})l:addtoggle('auto_heartbeat',{text='always win heartbeat minigame',default=
+true,tooltip='always win the heartbeat minigame (room 50 & 100)'})local m=k:
+addtab'entity assists'm:addtoggle('auto_screech',{text='anti-screech',default=
+true,tooltip='screech attacks no longer damage you.'})end do local k=j:
+addrighttabbox'notifiers'local l=k:addtab'alerts'l:addtoggle('event_notifier',{
+text='event notifier',default=true,tooltip=
+'notifies you when certain events occur'})l:addtoggle('debug_notifier',{text=
+'debug notifier',default=true,tooltip='notifies you of certain script changes'})
+l:addbutton('example alert (testing)',function()x(
+[[[example alert]: this is a test alert to get you familiar with the script's notification system!]]
+,true)end)local m=k:addtab'advanced'm:addtoggle('sound_notifier',{text=
+'sound alert',default=true,tooltip='important alerts will have sound cues!'})end
+end do local j=i:addtab'blatant'do local k=j:addleftgroupbox'prompts'k:
+addtoggle('instant_prompt',{text='instant interact',default=true,tooltip=
+'instantly interacts with prompts'})k:addtoggle('auto_prompt',{text=
+'automatic interact',default=true,tooltip='automaticall interacts with prompts'}
+):addkeypicker('auto_prompt_keybind',{text='auto-interact',default='v'})end end
+do local j=i:addtab'visuals'do local k=j:addlefttabbox'visuals'local l=k:addtab
+'entity visuals'l:addtoggle('rush_esp',{text='rush/ambush esp',default=true,
+tooltip='esp for both rush and ambush entities'})l:addtoggle('figure_esp',{text=
+'figure esp',default=true,tooltip="esp for the entity 'figure'"})local m=k:
+addtab'object visuals'm:addtoggle('door_esp',{text='door esp',default=true,
+tooltip='esp for doors'}):addcolorpicker('door_esp_color',{title='esp color',
+default=color3.new(0,0.5,1)})m:addtoggle('wardrobe_esp',{text='wardrobe esp',
+default=true,tooltip='esp for wardrobe'}):addcolorpicker('wardrobe_esp_color',{
+title='esp color',default=color3.new(0,1,0.9)})m:addtoggle('obtainable_esp',{
+text='obtainable esp',default=true,tooltip='esp for items that can be picked up'
+}):addcolorpicker('obtainable_esp_color',{title='esp color',default=color3.new(1
+,1,0)})m:addtoggle('interactable_esp',{text='interactable esp',default=true,
+tooltip='esp for interactable items'}):addcolorpicker('interactable_esp_color',{
+title='esp color',default=color3.new(1,1,1)})end do local k=j:addrightgroupbox
+'world render'end end do local j=i:addtab'credits'local k=j:addleftgroupbox
+'credits'k:addlabel'ominousvibes - creator'k:addlabel'inori @v3rm - ui library'k
+:addlabel'aztup @v3rm - breaker assist'k:adddivider()k:addlabel'contributors:'k:
+addlabel'> iamagoodscammer @v3rm'k:addlabel'> bob24 @v3rm'k:addlabel
+'> brickmane @v3rm'k:addlabel'> yuuiz#1336 @discord'k:adddivider()k:addlabel
+'donators:'k:addlabel'> reversing#2937 @discord'local l=j:addrightgroupbox
+'socials'l:addbutton('discord server',function()setclipboard
+'https://discord.gg/8patx7ukxz'end)end do local j=i:addtab'settings'm:
+setlibrary(k)l:setlibrary(k)m:setfolder'ominousvibes'l:setfolder
+'ominousvibes/doors'l:ignorethemesettings()l:setignoreindexes{'menukeybind'}l:
+buildconfigsection(j)m:applytotab(j)local k=j:addleftgroupbox'menu'k:addbutton(
+'unload',function()k:unload()end)k:addlabel'menu bind':addkeypicker(
+'menukeybind',{default='end',noui=true,text='menu keybind'})k:addtoggle(
+'keybinds',{text='show keybinds menu',default=true}):onchanged(function()k.
+keybindframe.visible=toggles.keybinds.value end)k:addtoggle('watermark',{text=
+'show watermark',default=true}):onchanged(function()k:setwatermarkvisibility(
+toggles.watermark.value)end)end end k:notify
+'ui built! [right ctrl or right shift]'l:loadautoloadconfig()do local i local j,
+k=typeof,unpack local l=game.isa i=hookmetamethod(game,'__namecall',function(m,
+...)if not checkcaller()then if j(m)=='instance'then if l(m,'remoteevent')then
+if m==u.clutchheartbeat then if toggles.auto_heartbeat.value then local n={...}
+if not n[2]then w=(w+1)%2 if w==0 then n[2]=true else return end end return i(m,
+k(n))end elseif m==u.screech then if toggles.auto_screech.value then local n={
+...}n[1]=true return i(m,k(n))end end end end end return i(m,...)end)end local i
+=function(i,j)for k,l in pairs(y.attached)do l:onphysics(i,j)end end local j=
+function(j)do local k=toggles.glow_enabled.value if k then local l=options.
+glow_brightness.value q.brightness=l/100 r.brightness=l/200 local m=o.
+camerasubject.parent if m then local n=m.primarypart if n then q.parent=n r.
+parent=n end end end q.enabled=k r.enabled=k end for k,l in pairs(z.attached)do
+l:render(j)end for m,n in pairs(b.attached)do n:render(j)end for o,p in pairs(c.
+attached)do p:render(j)end for q,r in pairs(d.attached)do r:render(j)end for s,t
+in pairs(e.attached)do t:render(j)end for u,v in pairs(g.attached)do v:render(j)
+end for w,x in pairs(f.attached)do x:render(j)end end local w=function(w)if
+toggles.event_notifier.value then local x=s.chasestart.value-w if 0<x and x<3
+then x("[event notifier]: there is an event in '"..tostring(x).."' rooms!",false
+)end end end local x=function()if toggles.event_notifier.value then x(
+[[[event notifier]: screech spawned, quickly turn around to look at it!]],true)
+end end local aa=function(y)if y=='elevatorbreaker'then local z do local _,aa=
+type,table.find local ab=is_synapse_function or iskrnlclosure repeat task.wait(
+0.5)for ac,ad in ipairs(getgc())do if _(ad)=='function'and islclosure(ad)and not
+ab(ad)then local ae=getconstants(ad)if aa(ae,'breakerswitch')and aa(ae,
+'getchildren')and ae[9]==1 then if toggles.debug_notifier.value then x(
+'breaker switch found!',true)end z=ad break end end if ac%500==0 then task.wait(
+)end end until z~=nil end local aa aa=hookfunction(z,function(...)if toggles.
+breaker_win.value then return 10 end return aa(...)end)end end local ab=function
+(ab)a.new(ab)end local ac=function(ac)y.new(ac)end local ad=function(ad)if ad.
+name=='rushmoving'then if toggles.event_notifier.value then x(
+'[event notifier]: rush spawned, hide quickly!',true)end c.new(ad)elseif ad.name
+=='ambushmoving'then if toggles.event_notifier.value then x(
+[[[event notifier]: ambush spawned, hide quickly! he can return up to 3-4 times!]]
+,true)end c.new(ad)elseif ad.name=='lookman'then if toggles.event_notifier.value
+then x('[event notifier]: eyes spawned, look away!',true)end end end local ae=
+function(ae)h.new(ae)end e.stepped:connect(i)e.renderstepped:connect(j)b.
+playeradded:connect(ab)n.characteradded:connect(ac)g.childadded:connect(ad)g.
+currentrooms.childadded:connect(ae)s.latestroom.changed:connect(w)u.screech.
+onclientevent:connect(x)u.engageminigame.onclientevent:connect(aa)u.padlockhint.
+onclientevent:connect(function(y,z,_)if y and z then v[y]=tostring(z)else v={}
+end end)if n.character then task.defer(ac,n.character)end for y,z in ipairs(b:
+getplayers())do if z~=n then task.defer(ab,z)end end for _,af in ipairs(g.
+currentrooms:getchildren())do task.defer(ae,af)end g:getpropertychangedsignal
+'currentcamera':connect(function()local ag=g.currentcamera if ag then o=ag end
+end)c.promptbuttonholdbegan:connect(function(ag,ah)if toggles.instant_prompt.
+value then task.spawn(fireproximityprompt,ag)end end)c.promptshown:connect(
+function(ag,ah)if toggles.auto_prompt.value and options.auto_prompt_keybind:
+getstate()then task.spawn(fireproximityprompt,ag)end end)p.name=a:generateguid(
+false)p.soundid='rbxassetid://6026984224'p.volume=6 p.parent=f q.range=40 r.
+range=200 return k:notify'[doors] loaded! (v4)'
+footer
+© 2023 github, inc.
+footer navigation
+terms
+privacy
+security
+status
+docs
+contact github
+pricing
+api
+training
+blog
+about
+doors-script/doors(1).lua at main · fushy28/doors-script
